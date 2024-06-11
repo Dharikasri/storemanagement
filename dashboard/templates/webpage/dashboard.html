@@ -1,154 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
 
-    .navbar {
-      background-color: #00ffff;
-      color: #fff;
-      padding: 10px 20px;
-    }
+        .navbar {
+            background-color: #00ffff;
+            color: #fff;
+            padding: 10px 20px;
+        }
 
-    .navbar ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
 
-    .navbar ul li {
-      display: inline;
-      margin-right: 20px;
-      font-weight: bold;
-    }
+        .navbar ul li {
+            display: inline;
+            margin-right: 20px;
+            font-weight: bold;
+        }
 
-    .navbar ul li a {
-      text-decoration: none;
-      color: #fff;
-    }
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+        }
 
-    .navbar .user-info {
-      float: right;
-      font-weight: normal;
-    }
+        .navbar .user-info {
+            float: right;
+            font-weight: normal;
+        }
 
-    .container {
-      margin: 20px auto;
-      max-width: 1200px;
-      padding: 0 20px;
-    }
+        .container {
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
 
-    .category-dropdown {
-      margin-bottom: 20px;
-    }
+        .category-dropdown {
+            margin-bottom: 20px;
+        }
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      grid-gap: 20px;
-    }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 20px;
+        }
 
-    .product {
-      border: 1px solid #ccc;
-      padding: 20px;
-      text-align: center;
-    }
+        .product {
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+        }
 
-    .product h3 {
-      margin-top: 0;
-    }
+        .product h3 {
+            margin-top: 0;
+        }
 
-    .product p {
-      margin-bottom: 10px;
-    }
+        .product p {
+            margin-bottom: 10px;
+        }
 
-    .product form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .product form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .product form label {
-      margin-bottom: 5px;
-    }
+        .product form label {
+            margin-bottom: 5px;
+        }
 
-    .product form select {
-      margin-bottom: 10px;
-    }
+        .product form select {
+            margin-bottom: 10px;
+            width: 100px; /* Adjust width as needed */
+        }
 
-    .product form button {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+        .product form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .product form button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+        .product form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <div class="store-title">
+<div class="store-title">
     <h1>My Store</h1>
-  </div>
-  <div class="navbar">
+</div>
+<div class="navbar">
     <ul>
-      <li><a href="{% url 'dashboard:homepage' %}">Homepage</a></li>
-      <li><a href="{% url 'order_list' %}">Orders</a></li>
-      <li><a href="{% url 'dashboard:accounts' %}">Account</a></li>
-      <li><a href="{% url 'dashboard:logout' %}">Logout</a></li>
-      <li class="user-info">Logged in as: {{ user.username }}</li>
+        <li><a href="{% url 'dashboard:homepage' %}">Homepage</a></li>
+        <li><a href="{% url 'order_list' %}">Orders</a></li>
+        <li><a href="{% url 'dashboard:accounts' %}">Account</a></li>
+        <li><a href="{% url 'dashboard:logout' %}">Logout</a></li>
+        <li class="user-info">Logged in as: {{ user.username }}</li>
     </ul>
-  </div>
-  <div class="container">
+</div>
+<div class="container">
     <h2>Categories</h2>
     <div class="category-dropdown">
-      <label for="categories">Select a category:</label>
-      <select id="categories" name="categories">
-        {% for category in categories %}
-        <option value="{{ category.id }}">{{ category.name }}</option>
-        {% endfor %}
-      </select>
+        <label for="categories">Select a category:</label>
+        <select id="categories" name="categories">
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
     </div>
-  </div>
-  
-  <div class="container">
+</div>
+
+<div class="container">
     <h2>Products</h2>
     <div class="products">
-      <!-- Product items -->
-      {% for product in products %}
-      <div class="product">
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
-        <p>Price: Rs:{{ product.price }}</p>
-        <form method="post" action="{% url 'add_order' %}">  
-          {% csrf_token %}
-          <input type="hidden" name="product_id" value="{{ product.id }}">
-          <label for="quantity{{ product.id }}">Quantity:</label>
-          <select id="quantity{{ product.id }}" name="quantity">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          <button type="submit">Buy</button>
-        </form>
-      </div>
-      {% endfor %}
+        <!-- Product items -->
+        {% for product in products %}
+        <div class="product">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p>Price: Rs:{{ product.price }}</p>
+            <form method="post" action="{% url 'add_order' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <label for="quantity{{ product.id }}">Quantity:</label>
+                <select id="quantity{{ product.id }}" name="quantity">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <!-- Add more options as needed -->
+                </select>
+                <button type="submit">Buy</button>
+            </form>
+        </div>
+        {% endfor %}
     </div>
-  </div>
+</div>
 </body>
 </html>
-  
