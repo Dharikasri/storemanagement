@@ -37,3 +37,21 @@ def customer_delete(request, pk):
         customer.delete()
         return redirect('customer_list')
     return render(request, 'customer/customer_confirm_delete.html', {'customer': customer})
+from rest_framework import generics
+from .models import Customer
+from .serializers import CustomerSerializer
+from rest_framework import viewsets
+
+
+class CustomerListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+
+class CustomerRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+from .serializers import CustomerSerializer
+
+class CustomerViewSet(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer

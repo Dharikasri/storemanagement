@@ -15,3 +15,20 @@ def create_category(request):
     else:
         form = categoryForm()
     return render(request, 'category/create_category.html', {'form': form})
+from rest_framework import viewsets
+from rest_framework import generics
+from .models import Category
+from .serializers import CategorySerializer
+
+class CategoryListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class CategoryRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+

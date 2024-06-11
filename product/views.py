@@ -9,8 +9,16 @@ def add_product(request):
             form.save()
     else:
         form = ProductForm()
-    return render(request, 'add_product.html', {'form': form})
+    return render(request, 'product/add_product.html', {'form': form})
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'product_list.html', {'products': products})
+    return render(request, 'product/product_list.html', {'products': products})
+
+from rest_framework import viewsets
+from .models import Product
+from .serializers import ProductSerializer
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
