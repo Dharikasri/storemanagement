@@ -57,7 +57,13 @@ def add_order_view(request):
             form.save()
             return redirect('order:order_list') 
     else:
-        form = OrderForm()
+        product_id = request.GET.get('product_id')  
+        if product_id:
+            product = Product.objects.get(pk=product_id)
+            form = OrderForm(initial={'products': product})
+        else:
+            form = OrderForm()
+    
     return render(request, 'order/add_order.html', {'form': form})
 
 
