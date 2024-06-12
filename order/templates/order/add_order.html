@@ -60,7 +60,7 @@
         <form method="post">
             {% csrf_token %}
             <label for="id_customer">Customer:</label>
-            {{ form.customer }}
+            <input type="text" id="id_customer" name="customer" value="{{ request.user.customer.name }}" readonly>
             <label for="id_products">Products:</label>
             {{ form.products }}
             <label for="id_quantity">Quantity:</label>
@@ -69,8 +69,5 @@
         </form>
     </div>
 </body>
-</html>
-
-
-
+</html
 

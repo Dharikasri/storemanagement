@@ -52,20 +52,26 @@ def accounts_view(request):
 def homepage_view(request):
     return render(request, 'webpage/Homepage.html')
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from order.forms import OrderForm
+from django.urls import reverse
+
 
 @login_required
 def add_order_view(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
+            form.instance.user = request.user
             form.save()
-            return redirect('order:order_list')  # Redirect to the order list using namespace
+            return redirect(reverse('order:order_list')) 
     else:
-        form = OrderForm()
-    return render(request, 'order/add_order.html', {'form': form})
+        customer_name = request.user.customer.name if hasattr(request.user, 'customer') else None
+        form = OrderForm(initial={'customer': customer_name})
+    return render(request, 'add_order.html', {'form': form})
 
 
-@login_required
 def order_list(request):
     orders = Order.objects.all()
     return render(request, 'order/order_list.html', {'orders': orders})
