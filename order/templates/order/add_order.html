@@ -57,10 +57,13 @@
 <body>
     <div class="container">
         <h1>Add Order</h1>
-        <form method="post">
+        <form method="post" action="{% url 'order:add_order' %}">
             {% csrf_token %}
             <label for="id_customer">Customer:</label>
-            <input type="text" id="id_customer" name="customer" value="{{ request.user.customer.name }}" readonly>
+            <!-- Displaying only the currently logged-in user's customer information -->
+            <select name="customer" id="id_customer" required>
+                <option value="{{ request.user.customer.id }}">{{ request.user.customer.name }}</option>
+            </select>
             <label for="id_products">Products:</label>
             {{ form.products }}
             <label for="id_quantity">Quantity:</label>
@@ -69,5 +72,4 @@
         </form>
     </div>
 </body>
-</html
-
+</html>

@@ -26,6 +26,5 @@ urlpatterns = [
     path('customer/', include('customer.urls')), 
     path('category/',include('category.urls')),
     path('product/',include('product.urls')),
-    path('order/',include('order.urls')),
-
+    path('order/', include('order.urls', namespace='order')),
 ]

@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib.auth.models import User
 from category.models import Category
 from product.models import Product
 from order.forms import OrderForm
 from order.models import Order
-from django.contrib.auth.models import User
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -26,52 +26,42 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'webpage/login.html', {'form': form})
 
-
 @login_required
 def dashboard_view(request):
     categories = Category.objects.all()
     products = Product.objects.all()
     return render(request, 'webpage/dashboard.html', {'categories': categories, 'products': products})
 
-
 def product_list(request):
     return render(request, 'product/product_list.html')
-
 
 def logout_view(request):
     logout(request)
     return redirect('dashboard:login_view')  # Redirect to the login view using namespace
-
 
 @login_required
 def accounts_view(request):
     users_with_customers = User.objects.filter(customer__isnull=False)
     return render(request, 'webpage/accounts.html', {'users_with_customers': users_with_customers})
 
-
 def homepage_view(request):
     return render(request, 'webpage/Homepage.html')
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from order.forms import OrderForm
-from django.urls import reverse
-
-
 @login_required
 def add_order_view(request):
+    print("request.method",request.method)
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            form.instance.user = request.user
+            form.instance.customer = request.user.customer
             form.save()
-            return redirect(reverse('order:order_list')) 
+            return redirect('order:order_list') 
     else:
-        customer_name = request.user.customer.name if hasattr(request.user, 'customer') else None
-        form = OrderForm(initial={'customer': customer_name})
-    return render(request, 'add_order.html', {'form': form})
+        form = OrderForm()
+    return render(request, 'order/add_order.html', {'form': form})
 
 
+@login_required
 def order_list(request):
     orders = Order.objects.all()
     return render(request, 'order/order_list.html', {'orders': orders})

@@ -7,7 +7,7 @@ def add_order(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('order_list')  # Assuming you have a URL named 'order_list'
+            return redirect('order:order_list')  # Assuming you have a URL named 'order_list'
     else:
         form = OrderForm()
     return render(request, 'order/add_order.html', {'form': form})

@@ -107,7 +107,7 @@
 <div class="navbar">
     <ul>
         <li><a href="{% url 'dashboard:homepage' %}">Homepage</a></li>
-        <li><a href="{% url 'order_list' %}">Orders</a></li>
+        <li><a href="{% url 'order:order_list' %}">Orders</a></li>
         <li><a href="{% url 'dashboard:accounts' %}">Account</a></li>
         <li><a href="{% url 'dashboard:logout' %}">Logout</a></li>
         <li class="user-info">Logged in as: {{ user.username }}</li>
@@ -121,7 +121,7 @@
             <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>
             <p>Price: Rs:{{ product.price }}</p>
-            <form method="post" action="{% url 'add_order' %}">
+            <form method="post" action="{% url 'order:add_order' %}">
                 {% csrf_token %}
                 <input type="hidden" name="product_id" value="{{ product.id }}">
                 <label for="quantity{{ product.id }}">Quantity:</label>
