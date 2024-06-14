@@ -64,8 +64,12 @@
             <select name="customer" id="id_customer" required>
                 <option value="{{ request.user.customer.id }}">{{ request.user.customer.name }}</option>
             </select>
-            <label for="id_products">Products:</label>
-            {{ form.products }}
+            <label for="id_product">Products:</label>
+            <select name="product" id="id_product" required>
+                {% for product in products %}
+                    <option value="{{ product.id }}">{{ product.name }}</option>
+                {% endfor %}
+            </select>
             <label for="id_quantity">Quantity:</label>
             {{ form.quantity }}
             <button type="submit">Submit</button>
