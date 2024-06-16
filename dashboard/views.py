@@ -53,19 +53,20 @@ def accounts_view(request):
 
 def homepage_view(request):
     return render(request, 'webpage/Homepage.html')
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from product.models import Product
+from order.forms import OrderForm  
 from order.models import Order, OrderProduct
-from order.forms import OrderForm 
-from product.models import Product  
+
 @login_required
 def add_order_view(request):
     if request.method == 'GET':
+        # Assuming product_id and product_name are passed via GET request
         product_id = request.GET.get('product_id')
         product_name = request.GET.get('product_name')
-        quantity = request.GET.get('quantity', 1)  
+        quantity = int(request.GET.get('quantity', 1))  # Ensure quantity is an integer
         
         product = get_object_or_404(Product, id=product_id)
         
@@ -81,25 +82,28 @@ def add_order_view(request):
                 product_id = form.cleaned_data['product'].id
                 quantity = form.cleaned_data['quantity']
                 
+                # Get the current customer (assuming a relationship between User and Customer)
                 customer = request.user.customer
                 
+                # Create a new order associated with the customer
                 order = Order.objects.create(customer=customer)
+                
+                # Create an OrderProduct linking the product and quantity to the order
                 OrderProduct.objects.create(order=order, product_id=product_id, quantity=quantity)
                 
                 messages.success(request, 'Order placed successfully!')
-                return redirect('order_list') 
+                return redirect('order_list')  # Replace 'order_list' with your actual URL name for order list view
             except Exception as e:
                 messages.error(request, f'Failed to place order. Error: {str(e)}')
         else:
             messages.error(request, 'Form is invalid. Please check the form inputs.')
     else:
-        form = OrderForm() 
-
-    return render(request, 'order/add_order.html', {'form': form, 'product': product_name})
-
+        form = OrderForm()
+    
+    return render(request, 'order/add_order.html', {'form': form, 'product_name': product_name})
 
 
 @login_required
 def order_list(request):
-    orders = Order.objects.all()
+    orders = Order.objects.filter(customer=request.user.customer)
     return render(request, 'order/order_list.html', {'orders': orders})

@@ -43,27 +43,31 @@
         <table>
             <thead>
                 <tr>
-                    <th>Product ID</th>
                     <th>Order Number</th>
                     <th>Order Date</th>
                     <th>Customer</th>
-                    <th>Quantity</th>
+                    <th>Products</th>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
-                    {% for order_product in order.orderproduct_set.all %}
-                        <tr>
-                            <td>{{ order_product.product.id }}</td>  <!-- Product ID from OrderProduct -->
-                            <td>{{ order.order_no }}</td>
-                            <td>{{ order.order_date }}</td>
-                            <td>{{ order.customer }}</td>  <!-- Assuming __str__ method of Customer model provides meaningful output -->
-                            <td>{{ order_product.quantity }}</td>  <!-- Quantity from OrderProduct -->
-                        </tr>
-                    {% endfor %}
+                    <tr>
+                        <td>{{ order.order_no }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.customer }}</td>
+                        <td>
+                            <ul>
+                                {% for order_product in order.orderproduct_set.all %}
+                                    <li>{{ order_product.product.id }} - {{ order_product.product.name }} (Quantity: {{ order_product.quantity }})</li>
+                                {% empty %}
+                                    <li>No products found for this order</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5">No orders found</td>
+                        <td colspan="4">No orders found</td>
                     </tr>
                 {% endfor %}
             </tbody>

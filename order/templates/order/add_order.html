@@ -6,21 +6,26 @@
     <title>Add Order</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
-            max-width: 600px;
-            margin: 20px auto;
+            width: 100%;
+            max-width: 500px;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
         h1 {
             text-align: center;
+            color: #333;
             margin-bottom: 20px;
         }
         form {
@@ -29,44 +34,48 @@
         label {
             font-weight: bold;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            color: #555;
         }
-        input[type="text"],
+        input[type="number"],
         select {
-            width: calc(100% - 12px);
+            width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
         }
         button[type="submit"] {
+            width: 100%;
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            float: right;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
         button[type="submit"]:hover {
             background-color: #45a049;
         }
     </style>
-</head>
 <body>
     <div class="container">
         <h1>Add Order</h1>
-        <form method="post">
+        <form method="post" action="{% url 'order:add_order' %}">
             {% csrf_token %}
             <label for="id_customer">Customer:</label>
-            <select required="" id="id_customer" name="customer">
+            <select required id="id_customer" name="customer">
                 <option value="{{ request.user.customer.id }}">{{ request.user.customer.name }}</option>
             </select>
             <label for="id_product">Product:</label>
-            <select required="" id="id_product" name="product">
-                <option value="{{ request.GET.product_name}}">{{ request.GET.product_name}}</option>
-            </select>   
+            <select required id="id_product" name="product">
+                <option value="{{ request.GET.product_id }}">{{ request.GET.product_name }}</option>
+            </select>
             <label for="id_quantity">Quantity:</label>
             <input type="number" id="id_quantity" name="quantity" value="{{ request.GET.quantity }}" required>
             <button type="submit">Submit</button>
