@@ -57,21 +57,18 @@
 <body>
     <div class="container">
         <h1>Add Order</h1>
-        <form method="post" action="{% url 'order:add_order' %}">
+        <form method="post">
             {% csrf_token %}
             <label for="id_customer">Customer:</label>
-            <!-- Displaying only the currently logged-in user's customer information -->
-            <select name="customer" id="id_customer" required>
+            <select required="" id="id_customer" name="customer">
                 <option value="{{ request.user.customer.id }}">{{ request.user.customer.name }}</option>
             </select>
-            <label for="id_product">Products:</label>
-            <select name="product" id="id_product" required>
-                {% for product in products %}
-                    <option value="{{ product.id }}">{{ product.name }}</option>
-                {% endfor %}
-            </select>
+            <label for="id_product">Product:</label>
+            <select required="" id="id_product" name="product">
+                <option value="{{ request.GET.product_name}}">{{ request.GET.product_name}}</option>
+            </select>   
             <label for="id_quantity">Quantity:</label>
-            {{ form.quantity }}
+            <input type="number" id="id_quantity" name="quantity" value="{{ request.GET.quantity }}" required>
             <button type="submit">Submit</button>
         </form>
     </div>

@@ -52,23 +52,22 @@
             </thead>
             <tbody>
                 {% for order in orders %}
-                {% for order_product in order.orderproduct_set.all %}
-                <tr>
-                    <td>{{ order_product.product.id }}</td>  <!-- Product ID from OrderProduct -->
-                    <td>{{ order.order_no }}</td>
-                    <td>{{ order.order_date }}</td>
-                    <td>{{ order.customer }}</td>
-                    <td>{{ order.quantity }}</td>  <!-- Quantity from OrderProduct -->
-                </tr>
-                {% endfor %}
+                    {% for order_product in order.orderproduct_set.all %}
+                        <tr>
+                            <td>{{ order_product.product.id }}</td>  <!-- Product ID from OrderProduct -->
+                            <td>{{ order.order_no }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.customer }}</td>  <!-- Assuming __str__ method of Customer model provides meaningful output -->
+                            <td>{{ order_product.quantity }}</td>  <!-- Quantity from OrderProduct -->
+                        </tr>
+                    {% endfor %}
                 {% empty %}
-                <tr>
-                    <td colspan="5">No orders found</td>
-                </tr>
+                    <tr>
+                        <td colspan="5">No orders found</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </body>
 </html>
-

@@ -2,13 +2,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from category.models import Category
 from product.models import Product
 from order.forms import OrderForm
 from order.models import Order
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from order.forms import OrderForm
+from order.models import Order, OrderProduct
+from product.models import Product
 
 def login_view(request):
     if request.method == 'POST':
@@ -50,64 +56,50 @@ def homepage_view(request):
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from product.models import Product
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from order.forms import OrderForm
-from product.models import Product
-
-
+from order.models import Order, OrderProduct
+from order.forms import OrderForm 
+from product.models import Product  
 @login_required
 def add_order_view(request):
-    if request.method == 'POST':
-        print("POST request received")
-        product_id = request.POST.get('product_id')
-        quantity = request.POST.get('quantity')
-        print(f"Product ID: {product_id}, Quantity: {quantity}")
+    if request.method == 'GET':
+        product_id = request.GET.get('product_id')
+        product_name = request.GET.get('product_name')
+        quantity = request.GET.get('quantity', 1)  
         
-        try:
-            product = Product.objects.get(id=product_id)
-            print(f"Product found: {product.name}")
-        except Product.DoesNotExist:
-            print(f"Product with ID {product_id} does not exist")
-            # Handle case where product does not exist, e.g., return an error response
+        product = get_object_or_404(Product, id=product_id)
         
-        # Assuming you have a default customer or logic to determine customer
-        initial_customer = request.user.customer
-        print(f"Initial customer: {initial_customer}")
-        
-        # Prepare initial data for the order form
         initial_data = {
-            'customer': initial_customer,
-            'products': [product],
+            'product': product,
             'quantity': quantity,
-            'product_name': product.name,  # Assuming 'name' is the attribute you want to prepopulate
         }
-        print("Initial data prepared:", initial_data)
-        
-        # Create an instance of the OrderForm with initial data
-        form = OrderForm(request.POST, initial=initial_data)
-        
+        form = OrderForm(initial=initial_data)
+    elif request.method == 'POST':
+        form = OrderForm(request.POST)
         if form.is_valid():
-            print("Form is valid")
-            form.save()
-            messages.success(request, 'Order placed successfully!')
-            return redirect('order_list')  # Redirect to order list page after successful submission
+            try:
+                product_id = form.cleaned_data['product'].id
+                quantity = form.cleaned_data['quantity']
+                
+                customer = request.user.customer
+                
+                order = Order.objects.create(customer=customer)
+                OrderProduct.objects.create(order=order, product_id=product_id, quantity=quantity)
+                
+                messages.success(request, 'Order placed successfully!')
+                return redirect('order_list') 
+            except Exception as e:
+                messages.error(request, f'Failed to place order. Error: {str(e)}')
         else:
-            print("Form is invalid")
-            messages.error(request, 'Failed to place order. Please check the form.')
+            messages.error(request, 'Form is invalid. Please check the form inputs.')
     else:
-        print("GET request received")
-    
-    # If not a POST request or form is invalid, render the product list page again
-    products = Product.objects.all()  # You might want to filter or order this differently
-    quantity_range = range(1, 11)  # Example range for quantity selection
-    
-    return render(request, 'order/addorder.html', {'products': products, 'quantity_range': quantity_range})
+        form = OrderForm() 
+
+    return render(request, 'order/add_order.html', {'form': form, 'product': product_name})
+
 
 
 @login_required
 def order_list(request):
-   orders = Order.objects.filter(customer=request.user.customer)
-   return render(request, 'order/order_list.html', {'orders': orders})
+    orders = Order.objects.all()
+    return render(request, 'order/order_list.html', {'orders': orders})

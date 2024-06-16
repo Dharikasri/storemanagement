@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             text-align: center;
-            background-color: sandal;
+            background-color: #fada5e; /* Updated background color */
         }
 
         .navbar {
@@ -39,17 +39,13 @@
         .navbar .user-info {
             float: right;
             font-weight: normal;
-            color:red;
+            color: red;
         }
 
         .container {
             margin: 20px auto;
             max-width: 1200px;
             padding: 0 20px;
-        }
-
-        .category-dropdown {
-            margin-bottom: 20px;
         }
 
         .products {
@@ -114,28 +110,25 @@
         <li class="user-info">Logged in as: {{ user.customer.name }}</li>
     </ul>
 </div>
-<div class="container">
-    <h2>Products</h2>
-    <div class="products">
-        {% for product in products %}
-        <div class="product">
-            <h3>{{ product.name }}</h3>
-            <p>{{ product.description }}</p>
-            <p>Price: Rs:{{ product.price }}</p>
-            <form method="post" action="{% url 'order:add_order' %}">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" value="{{ product.id }}">
-                <label for="quantity{{ product.id }}">Quantity:</label>
-                <select id="quantity{{ product.id }}" name="quantity">
-                    {% for i in quantity_range %}
-                        <option value="{{ i }}">{{ i }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Buy</button>
-            </form>
-        </div>
-        {% endfor %}
+<div class="products">
+    {% for product in products %}
+    <div class="product">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Price: Rs:{{ product.price }}</p>
+        <form method="get" action="{% url 'order:add_order' %}">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="product_name" value="{{ product.name }}">
+            <label for="quantity{{ product.id }}">Quantity:</label>
+            <select id="quantity{{ product.id }}" name="quantity">
+                {% for i in quantity_range %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Buy</button>
+        </form>
     </div>
+    {% endfor %}
 </div>
 </body>
 </html>
