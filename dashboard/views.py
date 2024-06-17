@@ -2,19 +2,18 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 from category.models import Category
 from product.models import Product
 from order.forms import OrderForm
 from order.models import Order
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from order.forms import OrderForm
 from order.models import Order, OrderProduct
 from product.models import Product
+from customer.models import Customer
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -25,7 +24,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('dashboard:dashboard')  # Redirect to the dashboard using namespace
+                return redirect('dashboard:homepage')  # Redirect to the dashboard using namespace
             else:
                 messages.error(request, 'Invalid username or password')
     else:
@@ -33,33 +32,41 @@ def login_view(request):
     return render(request, 'webpage/login.html', {'form': form})
 
 @login_required
+def homepage_view(request):
+       return render(request, 'webpage/Homepage.html', {'user': request.user.customer})
+
+
+@login_required
 def dashboard_view(request):
-    categories = Category.objects.all()
     products = Product.objects.all()
     quantity_range = range(1, 21)
-    return render(request, 'webpage/dashboard.html', {'categories': categories, 'products': products,'quantity_range': quantity_range})
+    return render(request, 'webpage/dashboard.html', {'products': products,'quantity_range': quantity_range})
 
 def product_list(request):
     return render(request, 'product/product_list.html')
 
-def logout_view(request):
-    logout(request)
-    return redirect('dashboard:login_view') 
 
 @login_required
 def accounts_view(request):
-    users_with_customers = User.objects.filter(customer__isnull=False)
-    return render(request, 'webpage/accounts.html', {'users_with_customers': users_with_customers})
+    try:
+        customer = Customer.objects.get(user=request.user)
+        user_with_customer = {
+            'username': request.user.username,
+            'customer': customer
+        }
+        context = {'user_with_customer': user_with_customer}
+    except Customer.DoesNotExist:
+        context = {'user_with_customer': None}
 
-def homepage_view(request):
-    return render(request, 'webpage/Homepage.html')
+    return render(request, 'webpage/accounts.html', context)
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from product.models import Product
 from order.forms import OrderForm  
 from order.models import Order, OrderProduct
-
 @login_required
 def add_order_view(request):
     if request.method == 'GET':
@@ -102,8 +109,18 @@ def add_order_view(request):
     
     return render(request, 'order/add_order.html', {'form': form, 'product_name': product_name})
 
+from order.models import OrderProduct 
 
 @login_required
 def order_list(request):
-    orders = Order.objects.filter(customer=request.user.customer)
+    orders = Order.objects.all()  # Fetch all orders
+    for order in orders:
+        print(f"Order Number: {order.order_no}")
+        for op in order.orderproduct_set.all():
+            print(f"Product Name: {op.product.name}, Product ID: {op.product.id}, Quantity: {op.quantity}")
+    
     return render(request, 'order/order_list.html', {'orders': orders})
+
+def logout_view(request):
+    logout(request)
+    return redirect('dashboard:login_view')

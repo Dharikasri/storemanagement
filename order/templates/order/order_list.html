@@ -7,71 +7,96 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f0f2f5; /* Light grey background */
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
         .container {
             max-width: 800px;
-            margin: 20px auto;
-            background-color: #fff;
+            margin: 0 auto;
+            background-color: #fff; /* White background for content */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Drop shadow for container */
+            margin-top: 20px;
         }
         h1 {
             text-align: center;
+            color: #007bff; /* Blue heading color */
             margin-bottom: 20px;
         }
-        table {
+        .order {
+            margin-bottom: 40px;
+        }
+        .order-number {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .customer {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .products-table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 10px;
         }
-        th, td {
-            padding: 10px;
+        .products-table th, .products-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
-        tr:hover {
-            background-color: #f5f5f5;
+        .products-table th {
+            background-color: #f2f2f2;
+        }
+        .products-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .products-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Order List</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order Number</th>
-                    <th>Order Date</th>
-                    <th>Customer</th>
-                    <th>Products</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
+
+        {% for order in orders %}
+        <div class="order">
+            <div class="order-number">Order Number: {{ order.order_no }}</div>
+            <div class="customer">Customer: {{ order.customer.name }}</div>
+            <table class="products-table">
+                <thead>
                     <tr>
-                        <td>{{ order.order_no }}</td>
-                        <td>{{ order.order_date }}</td>
-                        <td>{{ order.customer }}</td>
-                        <td>
-                            <ul>
-                                {% for order_product in order.orderproduct_set.all %}
-                                    <li>{{ order_product.product.id }} - {{ order_product.product.name }} (Quantity: {{ order_product.quantity }})</li>
-                                {% empty %}
-                                    <li>No products found for this order</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
+                        <th>Product Name</th>
+                        <th>Product ID</th> <!-- Include Product ID column -->
+                        <th>Quantity</th>
                     </tr>
-                {% empty %}
+                </thead>
+                <tbody>
+                    {% for op in order.orderproduct_set.all %}
                     <tr>
-                        <td colspan="4">No orders found</td>
+                        <td>{{ op.product.name }}</td>
+                        <td>{{ op.product.id }}</td> <!-- Display Product ID -->
+                        <td>{{ op.quantity }}</td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+        <a href="{% url 'dashboard:homepage' %}" class="back-link">Back to Homepage</a>
     </div>
 </body>
 </html>
