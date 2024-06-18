@@ -1,6 +1,5 @@
-# order/forms.py
 from django import forms
-from .models import Order
+from .models import Order, OrderProduct
 from product.models import Product
 
 class OrderForm(forms.ModelForm):
@@ -9,9 +8,26 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['product', 'quantity', 'customer']  # Include 'customer' field in the form
+        fields = ['customer']  # Only include fields directly from the Order model
 
     def __init__(self, *args, **kwargs):
+        initial_data = kwargs.get('initial', {})
         super().__init__(*args, **kwargs)
         # Adjust queryset for product field if needed
         self.fields['product'].queryset = Product.objects.all()  # Example: filter or order queryset as required
+        
+        # Initialize product and quantity from initial_data if available
+        if initial_data:
+            self.fields['product'].initial = initial_data.get('product')
+            self.fields['quantity'].initial = initial_data.get('quantity')
+
+    def save(self, commit=True):
+        order = super().save(commit=False)
+        # Save the order instance if commit is True
+        if commit:
+            order.save()
+        # Now create the OrderProduct instance
+        product = self.cleaned_data['product']
+        quantity = self.cleaned_data['quantity']
+        OrderProduct.objects.create(order=order, product=product, quantity=quantity)
+        return order

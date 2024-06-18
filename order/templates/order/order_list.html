@@ -32,6 +32,10 @@
             font-weight: bold;
             font-size: 18px;
         }
+        .order-date {
+            font-size: 16px;
+            color: #555; /* Grey color for order date */
+        }
         .customer {
             margin-top: 10px;
             font-size: 16px;
@@ -71,30 +75,39 @@
     <div class="container">
         <h1>Order List</h1>
 
-        {% for order in orders %}
-        <div class="order">
-            <div class="order-number">Order Number: {{ order.order_no }}</div>
-            <div class="customer">Customer: {{ order.customer.name }}</div>
-            <table class="products-table">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Product ID</th> <!-- Include Product ID column -->
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for op in order.orderproduct_set.all %}
-                    <tr>
-                        <td>{{ op.product.name }}</td>
-                        <td>{{ op.product.id }}</td> <!-- Display Product ID -->
-                        <td>{{ op.quantity }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endfor %}
+        {% if orders %}
+            {% for order in orders %}
+                <div class="order">
+                    <div class="order-number">Order Number: {{ order.order_no }}</div>
+                    <div class="order-date">Order Date: {{ order.order_date }}</div>
+                    <div class="customer">Customer: {{ order.customer.name }}</div>
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order_product in order.orderproduct_set.all %}
+                                <tr>
+                                    <td>{{ order_product.product.name }}</td>
+                                    <td>{{ order_product.product.pk }}</td>
+                                    <td>{{ order_product.quantity }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3">No products found for this order.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
 
         <a href="{% url 'dashboard:homepage' %}" class="back-link">Back to Homepage</a>
     </div>

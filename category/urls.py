@@ -3,6 +3,8 @@ from rest_framework import routers
 from . import views
 from .views import CategoryListCreateAPIView, CategoryRetrieveUpdateDestroyAPIView,CategoryViewSet
 
+app_name = 'category'
+
 router = routers.DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 
