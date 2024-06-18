@@ -11,6 +11,9 @@ class Order(models.Model):
     order_date = models.DateField(default=timezone.now)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
+    
+    class Meta:
+        ordering = ['-order_date']
 
     def save(self, *args, **kwargs):
         if not self.order_no:
