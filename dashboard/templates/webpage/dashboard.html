@@ -121,6 +121,7 @@
             <li><a href="{% url 'order:order_list' %}">Orders</a></li>
             <li><a href="{% url 'dashboard:accounts' %}">Account</a></li>
             <li><a href="{% url 'dashboard:logout' %}">Logout</a></li>
+            <li><a href="{%url 'add_product'%}">product</a></li>
         </ul>
         <div class="user-info">Logged in as: {{ user.customer.name }}</div>
     </div>
