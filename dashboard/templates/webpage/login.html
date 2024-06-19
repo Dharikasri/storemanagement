@@ -52,11 +52,22 @@
         .form-group button[type="submit"]:hover {
             background-color: #0056b3; /* Hover color */
         }
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <h2>Welcome to my store</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="error-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
         <form class="login-form" method="post">
             {% csrf_token %}
             <div class="form-group">

@@ -26,17 +26,15 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('dashboard:homepage')  # Redirect to the dashboard using namespace
+                return redirect('dashboard:dashboard')  
             else:
                 messages.error(request, 'Invalid username or password')
+        else:
+            messages.error(request, 'Invalid username or password')
     else:
         form = AuthenticationForm()
+    
     return render(request, 'webpage/login.html', {'form': form})
-
-@login_required
-def homepage_view(request):
-       return render(request, 'webpage/Homepage.html', {'user': request.user.customer})
-
 
 @login_required
 def dashboard_view(request):
