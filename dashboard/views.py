@@ -13,6 +13,8 @@ from order.forms import OrderForm
 from order.models import Order, OrderProduct
 from product.models import Product
 from customer.models import Customer
+from .decorators import admin_required
+from django.contrib.auth.models import User
 
 
 def login_view(request):
@@ -38,9 +40,21 @@ def homepage_view(request):
 
 @login_required
 def dashboard_view(request):
-    products = Product.objects.all()
-    quantity_range = range(1, 21)
-    return render(request, 'webpage/dashboard.html', {'products': products,'quantity_range': quantity_range})
+    user_is_superuser = request.user.is_superuser
+    
+    user_belongs_to_user_group = request.user.groups.filter(name='user').exists()
+    
+    products = Product.objects.all()  
+    
+    quantity_range = range(1, 21)  
+    
+    context = {
+        'user_is_superuser': user_is_superuser,
+        'user_belongs_to_user_group': user_belongs_to_user_group,
+        'products': products,
+        'quantity_range': quantity_range,
+    }   
+    return render(request, 'webpage/dashboard.html',context)
 
 def product_list(request):
     return render(request, 'product/product_list.html')
@@ -126,3 +140,24 @@ def order_list(request):
 def logout_view(request):
     logout(request)
     return redirect('dashboard:login_view')
+
+
+# Admin restricted views
+@admin_required
+def admin_dashboard_view(request):
+    return render(request, 'webpage/admin_dashboard.html')
+
+@admin_required
+def manage_orders(request):
+    orders = Order.objects.all()
+    return render(request, 'webpage/manage_orders.html', {'orders': orders})
+
+@admin_required
+def manage_products(request):
+    products = Product.objects.all()
+    return render(request, 'webpage/manage_products.html', {'products': products})
+
+@admin_required
+def manage_accounts(request):
+    users_with_customers = User.objects.filter(customer__isnull=False)
+    return render(request, 'webpage/manage_accounts.html', {'users_with_customers': users_with_customers})

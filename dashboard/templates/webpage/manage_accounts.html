@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account Details</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .go-dashboard {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .go-dashboard a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .go-dashboard a:hover {
+            background-color: #0056b3;
+        }
+        .no-details {
+            text-align: center;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Account Details</h2>
+        {% if users_with_customers %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Mobile</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_with_customer in users_with_customers %}
+                        <tr>
+                            <td>{{ user_with_customer.username }}</td>
+                            <td>{{ user_with_customer.customer.name }}</td>
+                            <td>{{ user_with_customer.customer.address }}</td>
+                            <td>{{ user_with_customer.customer.mobile }}</td>
+                            <td>{{ user_with_customer.customer.created_at }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-details">No users with associated customer details found.</p>
+        {% endif %}
+        <div class="go-dashboard">
+            <a href="{% url 'dashboard:dashboard' %}">Go to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

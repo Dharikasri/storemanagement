@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .order {
+            margin-bottom: 40px;
+        }
+        .order-number {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+        .order-date {
+            font-size: 16px;
+            color: #555;
+        }
+        .customer {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .products-table th, .products-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .products-table th {
+            background-color: #f2f2f2;
+        }
+        .products-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .products-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Orders</h1>
+
+        {% if orders %}
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Order Date</th>
+                        <th>Customer</th>
+                        <th>Product Name</th>
+                        <th>Product ID</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        {% for order_product in order.orderproduct_set.all %}
+                            <tr>
+                                {% if forloop.first %}
+                                    <td rowspan="{{ order.orderproduct_set.count }}">{{ order.order_no }}</td>
+                                    <td rowspan="{{ order.orderproduct_set.count }}">{{ order.order_date|date:"F d, Y" }}</td>
+                                    <td rowspan="{{ order.orderproduct_set.count }}">{{ order.customer.name }}</td>
+                                {% endif %}
+                                <td>{{ order_product.product.name }}</td>
+                                <td>{{ order_product.product.pk }}</td>
+                                <td>{{ order_product.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
+
+        <a href="{% url 'dashboard:homepage' %}" class="back-link">Back to Homepage</a>
+    </div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Store</title>
+    <title>My Store - Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -113,7 +113,7 @@
 </head>
 <body>
     <div class="store-title">
-        <h1>My Store</h1>
+        <h1>My Store - Dashboard</h1>
     </div>
     <div class="navbar">
         <ul>
@@ -121,9 +121,11 @@
             <li><a href="{% url 'order:order_list' %}">Orders</a></li>
             <li><a href="{% url 'dashboard:accounts' %}">Account</a></li>
             <li><a href="{% url 'dashboard:logout' %}">Logout</a></li>
-            <li><a href="{%url 'add_product'%}">product</a></li>
+            {% if user.is_superuser or user_belongs_to_user_group %}
+                <li><a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a></li>
+            {% endif %}
         </ul>
-        <div class="user-info">Logged in as: {{ user.customer.name }}</div>
+        <div class="user-info">Logged in as: {{ user.username }}</div>
     </div>
     <div class="products">
         {% for product in products %}
@@ -133,7 +135,6 @@
             <p>Price: Rs {{ product.price }}</p>
             <form method="get" action="{% url 'order:add_order' %}">
                 <input type="hidden" name="product_id" value="{{ product.id }}">
-                <input type="hidden" name="product_name" value="{{ product.name }}">
                 <label for="quantity{{ product.id }}">Quantity:</label>
                 <select id="quantity{{ product.id }}" name="quantity">
                     {% for i in quantity_range %}
