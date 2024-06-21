@@ -6,8 +6,11 @@
     <title>Logout</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
+            background-color: #f0f0f0; /* Light gray background */
+            margin: 0;
+            padding: 20px;
         }
         .container {
             max-width: 400px;
@@ -15,19 +18,22 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #f9f9f9;
+            background-color: #fff; /* White background */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
         }
         h2 {
             margin-top: 0;
+            color: #007bff; /* Primary blue color */
         }
         p {
-            color: green;
+            color: #28a745; /* Green color for success messages */
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Logout</h2>
+        <p>{{ message }}</p>
     </div>
 </body>
 </html>

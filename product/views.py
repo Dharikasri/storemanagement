@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import ProductForm
 from .models import Product
 
@@ -7,9 +7,11 @@ def add_product(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('product-list')  
     else:
         form = ProductForm()
     return render(request, 'product/add_product.html', {'form': form})
+
 
 def product_list(request):
     products = Product.objects.all()

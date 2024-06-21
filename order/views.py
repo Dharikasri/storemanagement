@@ -7,7 +7,7 @@ def add_order(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('order:order_list')  # Assuming you have a URL named 'order_list'
+            return redirect('order:order_list') 
     else:
         form = OrderForm()
     return render(request, 'order/add_order.html', {'form': form})
@@ -19,7 +19,7 @@ def order_list(request):
 
 from rest_framework import viewsets
 from .models import Order, OrderProduct
-from .serializers import OrderSerializer, OrderProductSerializer
+from .serializers import OrderSerializer, OrderProductSerializer 
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()

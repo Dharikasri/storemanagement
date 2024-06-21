@@ -26,7 +26,10 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('dashboard:dashboard')  
+                if username == 'user': 
+                    return redirect('dashboard:admin_dashboard')
+                else:
+                    return redirect('dashboard:dashboard') 
             else:
                 messages.error(request, 'Invalid username or password')
         else:
@@ -53,9 +56,6 @@ def dashboard_view(request):
         'quantity_range': quantity_range,
     }   
     return render(request, 'webpage/dashboard.html',context)
-
-def product_list(request):
-    return render(request, 'product/product_list.html')
 
 
 @login_required
@@ -131,12 +131,12 @@ def add_order_view(request):
 @login_required
 def order_list(request):
     customer = request.user.customer
-    orders = Order.objects.filter(customer=customer).order_by('-order_date').prefetch_related('orderproduct_set__product')
-    
+    orders = Order.objects.filter(customer=customer).prefetch_related('orderproduct_set__product')
     return render(request, 'order/order_list.html', {'orders': orders})
 
 def logout_view(request):
     logout(request)
+    messages.success(request, 'You have been logged out successfully.')
     return redirect('dashboard:login_view')
 
 

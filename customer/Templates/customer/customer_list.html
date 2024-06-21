@@ -3,14 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0; /* Light gray background */
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff; /* Primary blue color */
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+            text-align: left; /* Align list items to the left */
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9; /* Light background for each customer item */
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #e9ecef; /* Lighter background on hover */
+        }
+
+        li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            color: #007bff; /* Primary blue color on hover */
+        }
+
+        a.button {
+            display: inline-block;
+            background-color: #007bff; /* Primary blue color */
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        a.button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
 </head>
 <body>
-    <h1>Customer List</h1>
-    <ul>
-        {% for customer in customers %}
-        <li><a href="{% url 'customer_detail' customer.pk %}">{{ customer.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'customer_create' %}">Add Customer</a>
+    <div class="container">
+        <h1>Customer List</h1>
+        <ul>
+            {% for customer in customers %}
+            <li><a href="{% url 'customer_detail' customer.pk %}">{{ customer.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'customer_create' %}" class="button">Add Customer</a>
+    </div>
 </body>
 </html>

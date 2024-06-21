@@ -58,7 +58,7 @@
         }
 
         .user-info {
-            color: White; /* Blue text color for user info */
+            color: white; /* Blue text color for user info */
             font-weight: bold;
         }
 
@@ -92,6 +92,7 @@
         <ul>
             <li><a href="{% url 'dashboard:logout' %}">Logout</a></li>
             <li><a href="{% url 'add_product' %}">Add Product</a></li>
+            <li><a href="{%url 'customer_create'%}">Add Customer</a></li>
         </ul>
         <div class="user-info">Logged in as: {{ user.customer.name }}</div>
     </div>

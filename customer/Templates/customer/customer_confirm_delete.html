@@ -2,7 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Delete</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0; /* Light gray background */
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff; /* Primary blue color */
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: inline-block; /* Ensures form and link are aligned horizontally */
+        }
+
+        button[type="submit"] {
+            background-color: #dc3545; /* Bootstrap's danger color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-right: 10px; /* Add margin for spacing */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #c82333; /* Darker red on hover */
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <h1>Are you sure you want to delete "{{ customer.name }}"?</h1>

@@ -1,6 +1,12 @@
+# Import necessary modules
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from rest_framework import generics, viewsets
 from .models import Customer
 from .forms import CustomerForm
+from .serializers import CustomerSerializer
+
+# Django Views (Non-API)
 
 def customer_list(request):
     customers = Customer.objects.all()
@@ -26,10 +32,10 @@ def customer_update(request, pk):
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
-            return redirect('customer_list')
+            return redirect('customer_detail', pk=pk)
     else:
         form = CustomerForm(instance=customer)
-    return render(request, 'customer/customer_form.html', {'form': form})
+    return render(request, 'customer/customer_form.html', {'form': form, 'customer': customer})
 
 def customer_delete(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
@@ -37,11 +43,8 @@ def customer_delete(request, pk):
         customer.delete()
         return redirect('customer_list')
     return render(request, 'customer/customer_confirm_delete.html', {'customer': customer})
-from rest_framework import generics
-from .models import Customer
-from .serializers import CustomerSerializer
-from rest_framework import viewsets
 
+# DRF API Views
 
 class CustomerListCreateAPIView(generics.ListCreateAPIView):
     queryset = Customer.objects.all()
@@ -50,7 +53,6 @@ class CustomerListCreateAPIView(generics.ListCreateAPIView):
 class CustomerRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-from .serializers import CustomerSerializer
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()

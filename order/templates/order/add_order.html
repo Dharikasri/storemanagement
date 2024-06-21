@@ -6,15 +6,17 @@
     <title>Add Order</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            text-align: center;
+            background-color: #f0f0f0; /* Light gray background */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
+
         .container {
             width: 100%;
             max-width: 500px;
@@ -23,20 +25,25 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
+
         h1 {
             text-align: center;
-            color: #333;
+            color: #007bff; /* Primary blue color */
             margin-bottom: 20px;
         }
+
         form {
             width: 100%;
         }
+
         label {
             font-weight: bold;
             display: block;
             margin-bottom: 10px;
             color: #555;
+            text-align: left;
         }
+
         input[type="number"],
         select {
             width: calc(100% - 20px);
@@ -48,10 +55,11 @@
             font-size: 16px;
             color: #333;
         }
+
         button[type="submit"] {
             width: 100%;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #007bff; /* Primary blue color */
+            color: #fff; /* White text color */
             padding: 12px 20px;
             border: none;
             border-radius: 5px;
@@ -59,8 +67,9 @@
             font-size: 16px;
             transition: background-color 0.3s ease;
         }
+
         button[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #0056b3; /* Darker blue on hover */
         }
     </style>
 </head>

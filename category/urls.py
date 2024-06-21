@@ -6,7 +6,7 @@ from .views import CategoryListCreateAPIView, CategoryRetrieveUpdateDestroyAPIVi
 app_name = 'category'
 
 router = routers.DefaultRouter()
-router.register(r'categories', CategoryViewSet)
+router.register(r'categories', CategoryViewSet, basename='category')
 
 
 urlpatterns = [

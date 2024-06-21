@@ -5,46 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Account Details</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0; /* Light gray background */
         }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .go-dashboard {
+
+        h2 {
             text-align: center;
-            margin-top: 20px;
+            color: #007bff; /* Primary blue color */
+            margin-bottom: 20px;
         }
-        .go-dashboard a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
-        .go-dashboard a:hover {
-            background-color: #0056b3;
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
+
+        th {
+            background-color: #007bff; /* Primary blue color */
+            color: #fff; /* White text color */
+        }
+
         .no-details {
             text-align: center;
             color: #888;
             margin-top: 20px;
+        }
+
+        .go-dashboard {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .go-dashboard a {
+            text-decoration: none;
+            background-color: #007bff; /* Primary blue color */
+            color: #fff; /* White text color */
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .go-dashboard a:hover {
+            background-color: #0056b3; /* Darker blue on hover */
         }
     </style>
 </head>
