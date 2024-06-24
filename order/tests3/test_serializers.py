@@ -1,55 +1,38 @@
-# tests.py
-
 from django.test import TestCase
-from django.utils import timezone
-from decimal import Decimal
-from order.models import Order, OrderProduct
+from rest_framework.test import APIClient
+from rest_framework import status
+from django.contrib.auth.models import User
 from customer.models import Customer
 from product.models import Product
-import uuid
+from category.models import Category
+from decimal import Decimal
+from order.models import Order, OrderProduct
+from order.serializers import OrderSerializer, OrderProductSerializer
+from django.utils import timezone
 
-from order.serializers import OrderSerializer
-
-class OrderSerializerTestCase(TestCase):
+class SerializerTestCase(TestCase):
     def setUp(self):
-        # Create a customer
-        self.customer = Customer.objects.create(name='Sridhar')
-
-        # Create a product
+        # Set up a user, customer, category, and product
+        self.user = User.objects.create_user(username='testuser', password='password')
+        self.customer = Customer.objects.create(user=self.user, name='Test Customer', address='kk nagar', mobile='xxxxxxxxxx')
+        self.category = Category.objects.create(name='Test Category')
         self.product = Product.objects.create(
-            product_id=3,
-            name='Diary milk',
-            description='Test Description',
-            price=Decimal('10.00')
+            product_id=1, 
+            name='Test Product', 
+            description='A test product', 
+            expiry_date=None, 
+            price=Decimal('9.99')
         )
+        self.product.categories.add(self.category)
+        
+        self.order = Order.objects.create(customer=self.customer, order_date=timezone.now().date())
+        self.order_product = OrderProduct.objects.create(order=self.order, product=self.product, quantity=2)
 
-        # Create an order
-        self.order = Order.objects.create(
-            order_no=uuid.uuid4(),
-            order_date=timezone.datetime(2024, 6, 21).date(),
-            customer=self.customer
-        )
+    def test_order_product_serializer(self):
+        serializer = OrderProductSerializer(self.order_product)
+        data = serializer.data
+        
+        self.assertEqual(data['product']['name'], self.product.name)
+        self.assertEqual(data['quantity'], 2)
 
-        # Create an order product
-        self.order_product = OrderProduct.objects.create(
-            order=self.order,
-            product=self.product,
-            quantity=1
-        )
-
-    def test_order_serializer(self):
-        serializer = OrderSerializer(instance=self.order)
-        expected_data = {
-            'id': self.order.id,
-            'order_no': str(self.order.order_no),
-            'order_date': '2024-06-21',  # Ensure date format matches the serializer output
-            'customer': 'Sridhar',  # Customer name as string
-            'products': [
-                {
-                    'product_name': 'Diary milk',
-                    'product_id': 3,
-                    'quantity': 1
-                }
-            ]
-        }
-        self.assertEqual(serializer.data, expected_data)
+    

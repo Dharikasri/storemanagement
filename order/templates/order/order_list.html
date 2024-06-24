@@ -104,6 +104,7 @@
                     <tr>
                         <th>Order Number</th>
                         <th>Order Date</th>
+                        <th>Order Time</th>
                         <th>Customer</th>
                         <th>Product Name</th>
                         <th>Product ID</th>
@@ -118,6 +119,7 @@
                                     {% if forloop.first %}
                                         <td rowspan="{{ order.orderproduct_set.count }}">{{ order.order_no }}</td>
                                         <td rowspan="{{ order.orderproduct_set.count }}">{{ order.order_date|date:"F d, Y" }}</td>
+                                        <td rowspan="{{ order.orderproduct_set.count }}">{{ order.order_date|time:"H:i:s" }}</td>
                                         <td rowspan="{{ order.orderproduct_set.count }}">{{ order.customer.name }}</td>
                                     {% endif %}
                                     <td>{{ order_product.product.name }}</td>
@@ -129,7 +131,7 @@
                     {% endfor %}
                     {% if orders|length == 0 %}
                         <tr>
-                            <td colspan="6">No orders found for this customer.</td>
+                            <td colspan="7">No orders found for this customer.</td>
                         </tr>
                     {% endif %}
                 </tbody>

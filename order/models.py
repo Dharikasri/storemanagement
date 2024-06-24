@@ -1,17 +1,15 @@
-# order/models.py
-import uuid
 from django.db import models
-from django.utils import timezone
+from datetime import datetime
 from customer.models import Customer
 from product.models import Product
 from django.core.validators import MaxValueValidator
+import uuid
 
 class Order(models.Model):
     order_no = models.CharField(max_length=100, unique=True, editable=False)
-    order_date = models.DateField(default=timezone.now)
+    order_date = models.DateTimeField(default=datetime.now, null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
-
 
     def save(self, *args, **kwargs):
         if not self.order_no:
@@ -23,6 +21,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_no 
+
+    class Meta:
+        ordering = ['-order_date'] 
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
