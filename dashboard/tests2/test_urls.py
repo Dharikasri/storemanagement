@@ -7,7 +7,7 @@ class DashboardViewsTestCase(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.user.is_staff = True
-        self.user.is_superuser = True  # Set the user as superuser if required
+        self.user.is_superuser = True  
         self.user.save()
         login_successful = self.client.login(username='testuser', password='testpassword')
         self.assertTrue(login_successful)
