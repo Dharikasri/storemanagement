@@ -9,8 +9,8 @@ from customer.models import Customer
 class OrderURLsTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.customer = Customer.objects.create(name="Test Customer")  # Ensure Customer model has a 'name' field
-        self.order = Order.objects.create(customer=self.customer)  # Ensure Order model has a 'customer' field
+        self.customer = Customer.objects.create(name="Test Customer")  
+        self.order = Order.objects.create(customer=self.customer)  
 
     def test_add_order_url(self):
         url = reverse('order:add_order')
